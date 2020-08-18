@@ -14,7 +14,9 @@
   "author": "Benjamin Frost",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.0",
+    "ts3-nodejs-library": "^3.1.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
