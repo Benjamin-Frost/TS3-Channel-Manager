@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const { TeamSpeak } = require("ts3-nodejs-library")
 
 const ts3Query = new TeamSpeak({
     host: "localhost",
     serverport: 9987,
     username: "serveradmin",
-    password: "lgWdfXH4",
+    password: process.env.SQ_PW,
     nickname: "TS3 Channel Manager"
 })
 

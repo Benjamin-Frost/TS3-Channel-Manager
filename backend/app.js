@@ -3,7 +3,9 @@ require('dotenv').config()
 const express = require('express')
 const { ts3Query } = require('./ts-utils')
 const crypto = require('crypto')
+
 const mongoose = require('mongoose')
+const AuthUser = require('./models/auth-user')
 
 const app = express()
 const port = 3000
@@ -16,7 +18,7 @@ mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const tsUid = req.body.tsUid
   const authKey = req.body.authKey
   // Check if the request contains the Teamspeak UID and the auth key
@@ -25,8 +27,29 @@ app.post('/login', (req, res) => {
     return
   }
 
-  // Get Auth Key From DB
+  // Check if we can find a DB Entry with that UID
+  try {
+    const user = await AuthUser.findOne({ uid: tsUid })
 
+    // Check if Auth Keys are equal
+    if (authKey != user.key) {
+      res.status(400).send('Your Auth Key is wrong')
+    }
+
+    // Check if Auth Key is newer than 30 mins
+    if((new Date() - user.updatedAt) > 1800000) { // 30 min = 30*60*1000 = 1800000
+      res.status(400).send('Your auth key is too old! Please request a new one.')
+      return
+    }
+
+    // Authentication done => Authorize user
+    res.status(200).send('Authentication successful')
+
+  }
+  catch (err) {
+    console.error(err)
+    res.status(500).send('An error occured when trying to login')
+  }
 })
 
 app.post('/login/key', async (req, res) => {
@@ -47,16 +70,26 @@ app.post('/login/key', async (req, res) => {
     }
 
     // Generate random auth key and send it to client
-    var authThoken = crypto.randomBytes(8).toString('hex')
-    client.message((`Your auth key: ${authThoken}`))
+    var authToken = crypto.randomBytes(8).toString('hex')
+    client.message((`Your auth key: ${authToken}`))
 
-    // Store auth key in DB
+    // Check if DB Entry with that UID exists
+    const oldUser = await AuthUser.findOne({ uid: tsUid })
+
+    if (oldUser) {
+      oldUser.key = authToken
+      await oldUser.save()
+    }
+    else {
+      const authUser = new AuthUser({ uid: tsUid, key: authToken })
+      await authUser.save()
+    }
 
     res.status(200).send('Successfully send auth token to Client')
   }
   catch (err) {
     console.log(err)
-    res.status(500).send('An error occured when trying to get client/ send auth token')
+    res.status(500).send('An error occured when trying to send auth token to client')
   }
 })
 
