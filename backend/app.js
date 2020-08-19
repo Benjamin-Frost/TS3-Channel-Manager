@@ -2,7 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 
-const loginRouter = require('./routes//login');
+const loginRouter = require('./routes/login');
+const channelsRouter = require('./routes/channels')
 
 const app = express()
 const port = 3000
@@ -16,6 +17,7 @@ mongoose.connection.once('open', () => {
 });
 
 app.use('/login', loginRouter)
+app.use('/channels', channelsRouter)
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`)
