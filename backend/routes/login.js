@@ -1,3 +1,4 @@
+const config = require('../utils/config').config
 const router = require('express').Router()
 const { ts3Query } = require('../utils/ts3')
 const crypto = require('crypto')
@@ -21,8 +22,8 @@ router.post('/', async (req, res) => {
         if (authKey != user.key)
             return res.status(400).send('Your Auth Key is wrong')
 
-        // Check if Auth Key is newer than 30 mins
-        if ((new Date() - user.updatedAt) > 1800000) // 30 min = 30*60*1000 = 1800000
+        // Check if Auth Key has expired
+        if ((new Date() - user.updatedAt) > config.authKeyLifetime * 60000) // Lifetime in min * (60s * 10000ms)
             return res.status(400).send('Your auth key expired! Please request a new one.')
 
         // Login done => authenticate user

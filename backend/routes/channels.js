@@ -1,11 +1,9 @@
+const config = require('../utils/config').config
 const router = require('express').Router()
 const { ts3Query } = require('../utils/ts3')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Channel = require('../models/channel')
-
-const MAX_NUMBER_OF_CHANNELS = 20
-const CHANNEL_PARENT_ID = 3
 
 router.use((req, res, next) => {
     // JWT Authorisation
@@ -42,7 +40,7 @@ router.post('/create', async (req, res) => {
     try {
         const channel_amount = await Channel.countDocuments({ owner_uid: req.tsUid }).exec()
 
-        if (channel_amount > MAX_NUMBER_OF_CHANNELS)
+        if (channel_amount > config.maxChannelsPerUser)
             return res.send('You reached the maximum allowed amount of channels')
     }
     catch (err) {
@@ -70,7 +68,7 @@ router.post('/create', async (req, res) => {
         const ts3Channel = await ts3Query.channelCreate(`[${cNum}] ${cName}`, {
             channelPassword: cPassword,
             channelFlagPermanent: true,
-            cpid: CHANNEL_PARENT_ID,
+            cpid: config.rootChannelId,
             channelOrder: parentId // ID of previous channel
         })
 
