@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 
     // Check if we can find a DB Entry with that UID
     try {
-        const user = await AuthUser.findOne({ uid: tsUid })
+        const user = await AuthUser.findOne({ uid: tsUid }).exec()
 
         // Check if Auth Keys are equal
         if (authKey != user.key)
@@ -58,7 +58,7 @@ router.post('/key', async (req, res) => {
         client.message((`Your auth key: ${authToken}`))
 
         // Check if DB Entry with that UID exists
-        const oldUser = await AuthUser.findOne({ uid: tsUid })
+        const oldUser = await AuthUser.findOne({ uid: tsUid }).exec()
 
         if (oldUser) {
             oldUser.key = authToken

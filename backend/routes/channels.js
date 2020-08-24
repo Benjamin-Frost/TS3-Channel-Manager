@@ -3,9 +3,8 @@ const { ts3Query } = require('../utils/ts3')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Channel = require('../models/channel')
-const ts3 = require('../utils/ts3')
 
-const MAX_NUMBER_OF_CHANNELS = 2
+const MAX_NUMBER_OF_CHANNELS = 20
 const CHANNEL_PARENT_ID = 3
 
 router.use((req, res, next) => {
@@ -27,7 +26,7 @@ router.use((req, res, next) => {
 
 router.get('/', async (req, res) => {
     // Find all channels created by authorized user
-    const channels = await Channel.find({ owner_uid: req.tsUid })
+    const channels = await Channel.find({ owner_uid: req.tsUid }).exec()
 
     res.status(200).json(channels)
 })
@@ -41,7 +40,7 @@ router.post('/create', async (req, res) => {
 
     // Check if user reached channel limit
     try {
-        const channel_amount = await Channel.countDocuments({ owner_uid: req.tsUid })
+        const channel_amount = await Channel.countDocuments({ owner_uid: req.tsUid }).exec()
 
         if (channel_amount > MAX_NUMBER_OF_CHANNELS)
             return res.send('You reached the maximum allowed amount of channels')
@@ -53,14 +52,26 @@ router.post('/create', async (req, res) => {
 
     // Create new Channel
     try {
-        // TODO: Calculte actual channel num
-        const cNum = 1337
+        const channels = await Channel.find(
+            {},
+            'channel_id channel_num -_id',
+            { sort: { 'channel_num': 'asc' } }
+        ).exec()
+
+        // Calculte channel num
+        let cNum = 0
+        let parentId = 0
+        for (; cNum < channels.length; ++cNum) {
+            if (channels[cNum].channel_num != cNum)
+                break
+                parentId = channels[cNum].channel_id
+        }
 
         const ts3Channel = await ts3Query.channelCreate(`[${cNum}] ${cName}`, {
             channelPassword: cPassword,
             channelFlagPermanent: true,
             cpid: CHANNEL_PARENT_ID,
-            channelOrder: 0 // ID of previous channel
+            channelOrder: parentId // ID of previous channel
         })
 
         // Store channel in database
