@@ -1,13 +1,15 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const mongoose = require('mongoose')
 
-const loginRouter = require('./routes/login');
+const authRouter = require('./routes/auth');
 const channelsRouter = require('./routes/channels')
 
 const app = express()
-const port = 3000
+const port = 5000
 
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
@@ -16,7 +18,7 @@ mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-app.use('/login', loginRouter)
+app.use('/auth', authRouter)
 app.use('/channels', channelsRouter)
 
 app.listen(port, () => {

@@ -55,26 +55,26 @@ router.post('/key', async (req, res) => {
             return res.status(400).send('Could not find Client with that UID')
 
         // Generate random auth key and send it to client
-        var authToken = crypto.randomBytes(8).toString('hex')
-        client.message((`Your auth key: ${authToken}`))
+        var authkey = crypto.randomBytes(8).toString('hex')
+        client.message((`Your auth key: ${authKey}`))
 
         // Check if DB Entry with that UID exists
         const oldUser = await AuthUser.findOne({ uid: tsUid }).exec()
 
         if (oldUser) {
-            oldUser.key = authToken
+            oldUser.key = authkey
             await oldUser.save()
         }
         else {
-            const authUser = new AuthUser({ uid: tsUid, key: authToken })
+            const authUser = new AuthUser({ uid: tsUid, key: authkey })
             await authUser.save()
         }
 
-        res.status(200).send('Successfully send auth token to Client')
+        res.status(200).send('Successfully sent auth key to Client')
     }
     catch (err) {
         console.log(err)
-        res.status(500).send('An error occured when trying to send auth token to client')
+        res.status(500).send('An error occured when trying to send auth key to Client')
     }
 })
 
