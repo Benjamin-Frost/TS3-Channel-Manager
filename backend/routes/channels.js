@@ -24,7 +24,11 @@ router.use((req, res, next) => {
 
 router.get('/', async (req, res) => {
     // Find all channels created by authorized user
-    const channels = await Channel.find({ owner_uid: req.tsUid }).exec()
+    const channels = await Channel.find(
+        { owner_uid: req.tsUid },
+        'channel_num channel_name',
+        { sort: { 'channel_num': 'asc' } }
+    ).exec()
 
     res.status(200).json(channels)
 })
