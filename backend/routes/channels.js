@@ -1,4 +1,4 @@
-const config = require('../utils/config').config
+const { config } = require('../utils/config')
 const router = require('express').Router()
 const { ts3Query } = require('../utils/ts3')
 const jwt = require('jsonwebtoken')
