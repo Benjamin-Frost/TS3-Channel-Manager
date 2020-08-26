@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "../services/auth.service";
@@ -38,6 +39,7 @@ export default class Login extends Component {
     AuthService.login(this.state.tsUid, this.state.authKey)
       .then(() => {
         this.props.history.push("/channels");
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error)
@@ -65,6 +67,12 @@ export default class Login extends Component {
   }
 
   render() {
+    if(AuthService.isAuthenticated()) {
+      return (
+        <Redirect to="/channels" />
+      )
+    }
+
     return (
       <div className="col-md-12">
         <div className="card card-container">

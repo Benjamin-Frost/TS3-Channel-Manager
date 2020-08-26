@@ -54,6 +54,10 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
   }
+
+  isAuthenticated() {
+    return localStorage.getItem("user") !== null;
+  }
 }
 
 export default new AuthService();

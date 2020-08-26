@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "./services/auth.service";
+import { PrivateRoute } from "./helpers/PrivateRoute";
 
 import Login from "./components/login.component";
 import ChannelsList from "./components/channels-list.component";
@@ -74,8 +75,8 @@ class App extends Component {
           <div className="container mt-3">
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route exact path="/channels" component={ChannelsList} />
-              <Route path="/channels/create" component={ChannelsCreate} />
+              <PrivateRoute exact path="/channels" component={ChannelsList} />
+              <PrivateRoute path="/channels/create" component={ChannelsCreate} />
             </Switch>
           </div>
         </div>
