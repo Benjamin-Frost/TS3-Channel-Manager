@@ -52,7 +52,7 @@ router.post('/key', async (req, res) => {
         const client = await ts3Query.getClientByUid(tsUid)
 
         if (!client)
-            return res.status(400).send('Could not find Client with that UID')
+            return res.status(400).send('Could not find Client with that UID. Please make sure you are connected to the server.')
 
         // Generate random auth key and send it to client
         var authKey = crypto.randomBytes(8).toString('hex')

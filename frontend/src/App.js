@@ -5,7 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
-import Home from "./components/home.component";
+import ChannelsList from "./components/channels-list.component";
+import ChannelsCreate from "./components/channels-create.component";
 
 class App extends Component {
   constructor(props) {
@@ -44,8 +45,8 @@ class App extends Component {
             <div className="navbar-nav mr-auto">
               {currentUser && (
                 <li className="nav-item">
-                  <Link to={"/home"} className="nav-link">
-                    Home
+                  <Link to={"/channels"} className="nav-link">
+                    Channels
                   </Link>
                 </li>
               )}
@@ -73,7 +74,8 @@ class App extends Component {
           <div className="container mt-3">
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route path="/home" component={Home} />
+              <Route exact path="/channels" component={ChannelsList} />
+              <Route path="/channels/create" component={ChannelsCreate} />
             </Switch>
           </div>
         </div>

@@ -37,8 +37,7 @@ export default class Login extends Component {
 
     AuthService.login(this.state.tsUid, this.state.authKey)
       .then(() => {
-        this.props.history.push("/home");
-        window.location.reload();
+        this.props.history.push("/channels");
       })
       .catch((error) => {
         console.log(error)
@@ -97,6 +96,7 @@ export default class Login extends Component {
                 type="text"
                 className="form-control"
                 name="authKey"
+                autoComplete="off"
                 value={this.state.authKey}
                 onChange={this.onChangeAuthKey}
               />

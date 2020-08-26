@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import { ReactComponent as TrashIcon } from "../assets/icons/trash.svg";
 import { ReactComponent as PencilIcon } from "../assets/icons/pencil.svg";
 
 import ChannelService from "../services/channel.service";
 
-export default class Home extends Component {
+export default class ChannelsList extends Component {
    constructor(props) {
       super(props);
 
@@ -48,7 +50,18 @@ export default class Home extends Component {
    render() {
       return (
          <div className="container">
-            <h3>Your Channels</h3>
+            <div className="row align-items-center my-4">
+               <div className="col">
+                  <h3 className="mb-0">Your Channels</h3>
+               </div>
+               <div className="col-auto">
+                  <Link to="/channels/create">
+                     <button type="button" className="btn btn-success align-baseline">
+                        Create new Channel
+                     </button>
+                  </Link>
+               </div>
+            </div>
             <table className="table">
                <thead className="thead-light">
                   <tr>
@@ -71,13 +84,13 @@ const Channel = props => (
       <td>{props.channel.channel_num}</td>
       <td>{props.channel.channel_name}</td>
       <td>
-         <button onClick={() => props.deleteChannel(props.channel._id)}
-            className="btn btn-danger">
-            <TrashIcon />
-         </button>
          <button onClick={() => props.editChannel(props.channel._id)}
-            className="btn btn-warning ml-1">
+            className="btn btn-warning">
             <PencilIcon />
+         </button>
+         <button onClick={() => props.deleteChannel(props.channel._id)}
+            className="btn btn-danger ml-1">
+            <TrashIcon />
          </button>
       </td>
    </tr>
