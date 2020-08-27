@@ -45,7 +45,7 @@ router.post('/create', async (req, res) => {
         const channel_amount = await Channel.countDocuments({ owner_uid: req.tsUid }).exec()
 
         if (channel_amount > config.maxChannelsPerUser)
-            return res.send('You reached the maximum allowed amount of channels')
+            return res.status(403).send('You reached the maximum allowed amount of channels')
     }
     catch (err) {
         console.log(err)
@@ -60,13 +60,13 @@ router.post('/create', async (req, res) => {
             { sort: { 'channel_num': 'asc' } }
         ).exec()
 
-        // Calculte channel num
+        // Calculate channel num
         let cNum = 0
         let parentId = 0
         for (; cNum < channels.length; ++cNum) {
             if (channels[cNum].channel_num != cNum)
                 break
-                parentId = channels[cNum].channel_id
+            parentId = channels[cNum].channel_id
         }
 
         const ts3Channel = await ts3Query.channelCreate(`[${cNum}] ${cName}`, {
@@ -89,8 +89,55 @@ router.post('/create', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).send('An Error occured when creating the channel')
+        return res.status(500).send('An Error occured when creating the channel')
     }
+})
+
+router.delete('/:id', async (req, res) => {
+    // Check if passed id is a valid mongoDB ID
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).send('The passed ID is invalid')
+    }
+
+    // Get Owner UID and Channel ID from Database
+    let channel;
+    try {
+        channel = await Channel.findOne(
+            { _id: req.params.id },
+            'owner_uid channel_id'
+        ).exec()
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).send('An error occured when trying to access database')
+    }
+
+    // Check if a channel with that ID exists
+    if (!channel) {
+        return res.status(404).send('Could not find a channel with the requested ID')
+    }
+
+    // Make sure the delete request was made by the channel owner
+    if (channel.owner_uid != req.tsUid) {
+        return res.status(403).send('You cannot delete a channel that does not belong to you.')
+    }
+
+    try {
+        // Delete Channel from Teamspeak Server
+        const tsDelete = ts3Query.channelDelete(channel.channel_id, true)
+
+        // Delete Database Entry
+        const dbDelete = Channel.findByIdAndDelete(channel._id)
+
+        // Execute both at the same time
+        await Promise.all([tsDelete, dbDelete])
+    }
+    catch(err) {
+        console.log(err)
+        return res.status(500).send('An error occured when trying to delete channel')
+    }
+
+    res.send('Channel was deleted successfully')
 })
 
 module.exports = router;

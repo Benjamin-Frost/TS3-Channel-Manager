@@ -28,7 +28,7 @@ export default class ChannelCreate extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        ChannelService.createChannel(this.state.channelName, this.state.channelPassword)
+        ChannelService.createChannel(this.state.channelName.trim(), this.state.channelPassword)
             .then((data) => {
                 if (data.status === 200) {
                     this.props.history.push('/channels')
