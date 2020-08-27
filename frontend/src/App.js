@@ -8,6 +8,7 @@ import { PrivateRoute } from "./helpers/PrivateRoute";
 import Login from "./components/login.component";
 import ChannelsList from "./components/channels-list.component";
 import ChannelsCreate from "./components/channels-create.component";
+import ChannelsEdit from "./components/channels-edit.component";
 
 class App extends Component {
   constructor(props) {
@@ -62,14 +63,14 @@ class App extends Component {
                 </li>
               </div>
             ) : (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to={"/login"} className="nav-link">
-                    Login
+                <div className="navbar-nav ml-auto">
+                  <li className="nav-item">
+                    <Link to={"/login"} className="nav-link">
+                      Login
                   </Link>
-                </li>
-              </div>
-            )}
+                  </li>
+                </div>
+              )}
           </nav>
 
           <div className="container mt-3">
@@ -77,6 +78,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <PrivateRoute exact path="/channels" component={ChannelsList} />
               <PrivateRoute path="/channels/create" component={ChannelsCreate} />
+              <PrivateRoute path="/channels/edit/:id" component={ChannelsEdit} />
             </Switch>
           </div>
         </div>

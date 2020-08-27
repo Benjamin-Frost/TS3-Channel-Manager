@@ -11,7 +11,6 @@ export default class ChannelsList extends Component {
       super(props);
 
       this.deleteChannel = this.deleteChannel.bind(this);
-      this.editChannel = this.editChannel.bind(this);
 
       this.state = {
          content: [],
@@ -33,7 +32,6 @@ export default class ChannelsList extends Component {
       return this.state.content.map(c => {
          return <Channel channel={c}
             deleteChannel={this.deleteChannel}
-            editChannel={this.editChannel}
             key={c._id}
          />
       })
@@ -43,7 +41,7 @@ export default class ChannelsList extends Component {
       ChannelService.deleteChannel(id)
          .then((response) => {
             console.log(response);
-            
+
             this.setState({
                content: this.state.content.filter(c => c._id !== id)
             })
@@ -51,10 +49,6 @@ export default class ChannelsList extends Component {
          .catch((error) => {
             console.log(error)
          })
-   }
-
-   editChannel(id) {
-      console.log(`Trying to edit channel with db id: ${id}`)
    }
 
    render() {
@@ -94,10 +88,13 @@ const Channel = props => (
       <td>{props.channel.channel_num}</td>
       <td>{props.channel.channel_name}</td>
       <td>
-         <button onClick={() => props.editChannel(props.channel._id)}
-            className="btn btn-warning">
-            <PencilIcon />
-         </button>
+         <Link to={`/channels/edit/${props.channel._id}`}>
+            <button type="button"
+               className="btn btn-warning">
+               <PencilIcon />
+            </button>
+         </Link>
+
          <button onClick={() => props.deleteChannel(props.channel._id)}
             className="btn btn-danger ml-1">
             <TrashIcon />
