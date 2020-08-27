@@ -26,11 +26,11 @@ class ChannelService {
   async createChannel(channelName, channelPassword) {
     try {
       const response = await axios.post(API_URL + "/create",
-      {
-        channelName,
-        channelPassword
-      },
-      { headers: authHeader() });
+        {
+          channelName,
+          channelPassword
+        },
+        { headers: authHeader() });
 
       return response
     }
@@ -46,7 +46,25 @@ class ChannelService {
         throw Error("There was an error setting up the request.")
       }
     }
+  }
 
+  async deleteChannel(id) {
+    try {
+      const response = await axios.delete(API_URL + "/" + id, { headers: authHeader() })
+      return response
+    }
+    catch (error) {
+      if (error.response) {
+        // The request was made, but the server answered with an error
+        throw Error(error.response.data)
+      }
+      else if (error.request) {
+        throw Error("The request was made, but no answer was received.")
+      }
+      else {
+        throw Error("There was an error setting up the request.")
+      }
+    }
   }
 }
 

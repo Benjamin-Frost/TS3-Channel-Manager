@@ -40,7 +40,17 @@ export default class ChannelsList extends Component {
    }
 
    deleteChannel(id) {
-      console.log(`Trying to delete channel with db id: ${id}`)
+      ChannelService.deleteChannel(id)
+         .then((response) => {
+            console.log(response);
+            
+            this.setState({
+               content: this.state.content.filter(c => c._id !== id)
+            })
+         })
+         .catch((error) => {
+            console.log(error)
+         })
    }
 
    editChannel(id) {
