@@ -75,7 +75,7 @@ router.post('/create', async (req, res) => {
 
     try {
         // Create channel on TS3 Server
-        const ts3Channel = ts3Query.channelCreate(`[${cNum}] ${cName}`, {
+        const ts3Channel = await ts3Query.channelCreate(`[${cNum}] ${cName}`, {
             channelPassword: cPassword,
             channelFlagPermanent: true,
             cpid: config.rootChannelId,
@@ -88,17 +88,16 @@ router.post('/create', async (req, res) => {
             channel_num: cNum,
             channel_name: cName,
             owner_uid: req.tsUid
-        }).save()
+        })
 
-        // We called both in parallel (no 'await') => Therefore wait until both have finished
-        await Promise.all([ts3Channel, dbChannel])
+        await dbChannel.save()
     }
     catch (err) {
         console.log(err)
         return res.status(500).send('An error occured when trying to create channel')
     }
 
-    res.send(`Successfully created Channel with number ${dbChannel.channel_num}`)
+    res.send('Successfully created Channel')
 })
 
 router.delete('/:id', async (req, res) => {
@@ -146,7 +145,7 @@ router.patch('/:id', async (req, res) => {
     }
 
     if (cName) {
-        newChannelProps["channelName"] = `[${channel.channel_num}] ${cName}`
+        newChannelProps["channelName"] = `[${validateObj.channel.channel_num}] ${cName}`
     }
 
     try {
@@ -158,7 +157,7 @@ router.patch('/:id', async (req, res) => {
         // Update Channel in Database
         if (cName) {
             validateObj.channel.channel_name = cName
-            const dbPatch = channel.save()
+            const dbPatch = validateObj.channel.save()
             patchPromises.push(dbPatch)
         }
 
