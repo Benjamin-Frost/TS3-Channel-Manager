@@ -1,22 +1,19 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import StepWizard from 'react-step-wizard';
 
 import AuthService from "../services/auth.service";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
-    this.handleLogin = this.handleLogin.bind(this);
     this.onChangeTsUid = this.onChangeTsUid.bind(this);
     this.onChangeAuthKey = this.onChangeAuthKey.bind(this);
-    this.requestAuthKey = this.requestAuthKey.bind(this);
 
     this.state = {
       tsUid: "",
       authKey: "",
-      loading: false,
-      message: "",
     };
   }
 
@@ -28,100 +25,21 @@ export default class Login extends Component {
     this.setState({ authKey: e.target.value });
   }
 
-  handleLogin(e) {
-    e.preventDefault();
-
-    this.setState({
-      message: "",
-      loading: true,
-    });
-
-    AuthService.login(this.state.tsUid, this.state.authKey)
-      .then(() => {
-        this.props.history.push("/channels");
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error)
-        this.setState({
-          loading: false,
-          message: error.message
-        })
-      })
-  }
-
-  requestAuthKey(e) {
-    e.preventDefault();
-
-    AuthService.requestAuthKey(this.state.tsUid)
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((error) => {
-        console.log(error)
-        this.setState({
-          loading: false,
-          message: error.message
-        })
-      })
-  }
-
   render() {
-    if(AuthService.isAuthenticated()) {
+    if (AuthService.isAuthenticated()) {
       return (
         <Redirect to="/channels" />
       )
     }
 
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
-          <form onSubmit={this.handleLogin}>
-            <div className="form-group">
-              <label htmlFor="tsUid">TS UID</label>
-              <input
-                type="text"
-                className="form-control"
-                name="tsUid"
-                value={this.state.tsUid}
-                onChange={this.onChangeTsUid}
-              />
-            </div>
-
-            <div className="form-group">
-              <button
-                type="button"
-                onClick={this.requestAuthKey}
-                className="btn btn-primary btn-block"
-              >
-                Request Auth Key
-              </button>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="authKey">Auth Key</label>
-              <input
-                type="text"
-                className="form-control"
-                name="authKey"
-                autoComplete="off"
-                value={this.state.authKey}
-                onChange={this.onChangeAuthKey}
-              />
-            </div>
-
-            <div className="form-group">
-              <button
-                className="btn btn-primary btn-block"
-                disabled={this.state.loading}
-              >
-                {this.state.loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                Login
-              </button>
-            </div>
-
+      <div className="jumbotron">
+        <div className="row">
+          <div className="col-12">
+            <StepWizard>
+              <First state={this.state} onChange={this.onChangeTsUid} />
+              <Second state={this.state} onChange={this.onChangeAuthKey} history={this.props.history} />
+            </StepWizard>
             {this.state.message && (
               <div className="form-group">
                 <div className="alert alert-danger" role="alert">
@@ -129,9 +47,71 @@ export default class Login extends Component {
                 </div>
               </div>
             )}
-          </form>
+          </div>
         </div>
       </div>
     );
   }
 }
+
+const Stats = ({
+  nextStep,
+  totalSteps,
+  step,
+}) => (
+    <div>
+      <hr />
+      { step < totalSteps ?
+        <button className="btn btn-primary btn-block" onClick={nextStep}>Continue</button>
+        :
+        <button className="btn btn-success btn-block" onClick={nextStep}>Finish</button>
+      }
+    </div>
+  );
+
+const First = props => {
+  const requestAuthKey = async () => {
+    try {
+      await AuthService.requestAuthKey(props.state.tsUid);
+      props.nextStep();
+    }
+    catch (error) {
+      alert(error.message);
+    }
+  }
+
+  return (
+    <div>
+      <h2 className="text-center mb-3">Welcome!</h2>
+
+      <label>TS UID</label>
+      <input type="text" className="form-control" name="tsUid" onChange={props.onChange} />
+
+      <Stats step={1} {...props} nextStep={requestAuthKey} />
+    </div>
+  );
+};
+
+const Second = props => {
+  const handleLogin = async () => {
+    try {
+      await AuthService.login(props.state.tsUid, props.state.authKey);
+      props.history.push("/channels");
+      window.location.reload();
+    }
+    catch (error) {
+      alert(error.message);
+    }
+  }
+
+  return (
+    <div>
+      <h2 className="text-center">Almost there!</h2>
+
+      <label>Auth Key</label>
+      <input type="text" className="form-control" name="authKey" autoComplete="off" onChange={props.onChange} />
+
+      <Stats step={2} {...props} nextStep={handleLogin} />
+    </div>
+  );
+};
