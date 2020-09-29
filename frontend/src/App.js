@@ -32,6 +32,7 @@ class App extends Component {
 
   logOut() {
     AuthService.logout();
+    window.location.reload();
   }
 
   render() {
@@ -40,42 +41,36 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <Link to={"/"} className="navbar-brand">
-              TS3 Channel Manager
-            </Link>
-            <div className="navbar-nav mr-auto">
-              {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/channels"} className="nav-link">
-                    Channels
-                  </Link>
-                </li>
-              )}
-            </div>
-
-            {currentUser ? (
-              <div className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
-                    LogOut
-                  </a>
-                </li>
-              </div>
-            ) : (
-                <div className="navbar-nav ml-auto">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div className="container">
+              <Link to={"/"} className="navbar-brand">TS3 Channel Manager</Link>
+              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav mr-auto">
+                  {currentUser && (
+                    <li className="nav-item">
+                      <Link to={"/channels"} className="nav-link">Channels</Link>
+                    </li>
+                  )}
+                </ul>
+                <ul className="navbar-nav">
                   <li className="nav-item">
-                    <Link to={"/login"} className="nav-link">
-                      Login
-                  </Link>
+                    {currentUser ? (
+                      <button className="btn btn-primary" onClick={this.logOut}>Logout</button>
+                    ) : (
+                      <Link to={"/login"} className="btn btn-primary">Login</Link>
+                    )}
                   </li>
-                </div>
-              )}
+                </ul>
+              </div>
+            </div>
           </nav>
 
           <div className="container mt-3">
             <Switch>
-              <Route exact path="/login" component={Login} />
+              <Route path="/login" component={Login} />
               <PrivateRoute exact path="/channels" component={ChannelsList} />
               <PrivateRoute path="/channels/create" component={ChannelsCreate} />
               <PrivateRoute path="/channels/edit/:id" component={ChannelsEdit} />

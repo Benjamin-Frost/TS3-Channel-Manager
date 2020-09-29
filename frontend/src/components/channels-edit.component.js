@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import ChannelService from "../services/channel.service";
 
-export default class ChannelCreate extends Component {
+export default class ChannelsEdit extends Component {
     constructor(props) {
         super(props);
 
