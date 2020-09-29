@@ -102,7 +102,7 @@ router.post('/create', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     // Check if Channel with requested ID exists and user is Channel owner
-    validateObj = await validateChannelAndOwner(req.params.id, req.tsUid)
+    const validateObj = await validateChannelAndOwner(req.params.id, req.tsUid)
     if (validateObj.error)
         return res.status(validateObj.code).send(validateObj.message)
 
@@ -133,7 +133,7 @@ router.patch('/:id', async (req, res) => {
         return res.status(400).send('Please provide a new channel name and/or a new password')
 
     // Check if Channel with requested ID exists and user is Channel owner
-    validateObj = await validateChannelAndOwner(req.params.id, req.tsUid)
+    const validateObj = await validateChannelAndOwner(req.params.id, req.tsUid)
     if (validateObj.error)
         return res.status(validateObj.code).send(validateObj.message)
 
@@ -149,20 +149,20 @@ router.patch('/:id', async (req, res) => {
     }
 
     try {
-        let patchPromises = []
+        let allPromises = []
         // Update Channel on TS3 Server
         const tsPatch = ts3Query.channelEdit(validateObj.channel.channel_id, newChannelProps)
-        patchPromises.push(tsPatch)
+        allPromises.push(tsPatch)
 
         // Update Channel in Database
         if (cName) {
             validateObj.channel.channel_name = cName
             const dbPatch = validateObj.channel.save()
-            patchPromises.push(dbPatch)
+            allPromises.push(dbPatch)
         }
 
         // We called both in parallel (no 'await') => Therefore wait until both have finished
-        await Promise.all(patchPromises)
+        await Promise.all(allPromises)
     }
     catch (err) {
         console.log(err)
