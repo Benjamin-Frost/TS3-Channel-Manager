@@ -66,18 +66,20 @@ export default class ChannelsList extends Component {
                   </Link>
                </div>
             </div>
-            <table className="table">
-               <thead className="thead-light">
-                  <tr>
-                     <th>Number</th>
-                     <th>Name</th>
-                     <th>Actions</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {this.channelList()}
-               </tbody>
-            </table>
+            <div className="table-responsive">
+               <table className="table">
+                  <thead className="thead-light">
+                     <tr>
+                        <th>Number</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {this.channelList()}
+                  </tbody>
+               </table>
+            </div>
          </div>
       );
    }

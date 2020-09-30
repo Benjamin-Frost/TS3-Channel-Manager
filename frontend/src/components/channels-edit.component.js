@@ -11,10 +11,25 @@ export default class ChannelsEdit extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
+            oldChannelName: "",
             channelName: "",
             channelPassword: "",
             message: ""
         }
+    }
+
+    componentDidMount() {
+        ChannelService.getChannelById(this.props.match.params.id)
+            .then((data) => {
+                this.setState({
+                    channelName: data[0].channel_name,
+                    oldChannelName: data[0].channel_name
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({ content: [] });
+            })
     }
 
     onChangeChannelName(e) {
@@ -33,7 +48,7 @@ export default class ChannelsEdit extends Component {
 
         let newChannelProps = {}
 
-        if (cName) {
+        if (cName && cName !== this.state.oldChannelName.trim()) {
             newChannelProps["channelName"] = cName;
         }
 
@@ -59,7 +74,7 @@ export default class ChannelsEdit extends Component {
                 <h3 className="my-4">Edit Channel</h3>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="channelName">Name</label>
+                        <label htmlFor="channelName">New Name</label>
                         <input
                             type="text"
                             className="form-control"
@@ -69,7 +84,7 @@ export default class ChannelsEdit extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="channelPassword">Password</label>
+                        <label htmlFor="channelPassword">New Password</label>
                         <input
                             type="password"
                             className="form-control"

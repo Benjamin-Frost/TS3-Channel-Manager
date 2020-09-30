@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "jquery/dist/jquery.slim.js";
+import "bootstrap/js/dist/collapse.js";
 
 import AuthService from "./services/auth.service";
 import { PrivateRoute } from "./helpers/PrivateRoute";
@@ -45,7 +47,7 @@ class App extends Component {
             <div className="container">
               <Link to={"/"} className="navbar-brand">TS3 Channel Manager</Link>
               <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span className="navbar-toggler-icon"></span>
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">

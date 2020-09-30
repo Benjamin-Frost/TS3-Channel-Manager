@@ -33,6 +33,15 @@ router.get('/', async (req, res) => {
     res.status(200).json(channels)
 })
 
+router.get('/:id', async (req, res) => {
+    const channel = await Channel.find(
+        { _id: req.params.id },
+        'channel_id channel_num channel_name owner_uid'
+    ).exec()
+
+    res.status(200).json(channel)
+})
+
 router.post('/create', async (req, res) => {
     const cName = req.body.channelName
     const cPassword = req.body.channelPassword
