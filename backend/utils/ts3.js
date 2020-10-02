@@ -16,7 +16,12 @@ ts3Query.on("ready", () => {
 
 ts3Query.on("error", () => {
     console.error('Error occured when trying to connect to TS3 Server')
-    process.exit(1)
+})
+
+// Connection lost => Try to reconnect...
+ts3Query.on("close", async () => {
+    console.log("Connection to TS3 Server lost! Trying to reconnect...")
+    await ts3Query.reconnect(-1, 5000) // Retry every 5 seconds
 })
 
 module.exports = { ts3Query }
