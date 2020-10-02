@@ -18,18 +18,17 @@ export default class ChannelsEdit extends Component {
         }
     }
 
-    componentDidMount() {
-        ChannelService.getChannelById(this.props.match.params.id)
-            .then((data) => {
-                this.setState({
-                    channelName: data[0].channel_name,
-                    oldChannelName: data[0].channel_name
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({ content: [] });
-            })
+    async componentDidMount() {
+        try {
+            const res = await ChannelService.getChannelById(this.props.match.params.id);
+            this.setState({
+                channelName: res[0].channel_name,
+                oldChannelName: res[0].channel_name
+            });
+        }
+        catch (error) {
+            this.setState({ message: error.message });
+        }
     }
 
     onChangeChannelName(e) {
@@ -40,7 +39,7 @@ export default class ChannelsEdit extends Component {
         this.setState({ channelPassword: e.target.value })
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
         const cName = this.state.channelName.trim()
@@ -56,16 +55,15 @@ export default class ChannelsEdit extends Component {
             newChannelProps["channelPassword"] = cPass;
         }
 
-        ChannelService.editChannel(this.props.match.params.id, newChannelProps)
-            .then((data) => {
-                if (data.status === 200) {
-                    this.props.history.push('/channels')
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({ message: error.message });
-            })
+        try {
+            const res = await ChannelService.editChannel(this.props.match.params.id, newChannelProps);
+            if (res.status === 200) {
+                this.props.history.push('/channels');
+            }
+        }
+        catch (error) {
+            this.setState({ message: error.message });
+        }
     }
 
     render() {

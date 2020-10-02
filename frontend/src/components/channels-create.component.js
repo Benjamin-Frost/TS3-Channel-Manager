@@ -25,19 +25,17 @@ export default class ChannelCreate extends Component {
         this.setState({ channelPassword: e.target.value })
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
 
-        ChannelService.createChannel(this.state.channelName.trim(), this.state.channelPassword)
-            .then((data) => {
-                if (data.status === 200) {
-                    this.props.history.push('/channels')
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({ message: error.message })
-            })
+        try {
+            const res = await ChannelService.createChannel(this.state.channelName.trim(), this.state.channelPassword);
+            if (res.status === 200)
+                this.props.history.push('/channels');
+        }
+        catch (error) {
+            this.setState({ message: error.message });
+        }
     }
 
     render() {

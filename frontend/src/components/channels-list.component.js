@@ -14,18 +14,21 @@ export default class ChannelsList extends Component {
 
       this.state = {
          content: [],
+         message: "",
       };
    }
 
-   componentDidMount() {
-      ChannelService.getChannelList()
-         .then((data) => {
-            this.setState({ content: data });
-         })
-         .catch((error) => {
-            console.log(error);
-            this.setState({ content: [] });
-         })
+   async componentDidMount() {
+      try {
+         const res = await ChannelService.getChannelList();
+         this.setState({ content: res });
+      }
+      catch (error) {
+         this.setState({
+            content: [],
+            message: error.message
+         });
+      }
    }
 
    channelList() {
@@ -37,23 +40,28 @@ export default class ChannelsList extends Component {
       })
    }
 
-   deleteChannel(id) {
-      ChannelService.deleteChannel(id)
-         .then((response) => {
-            console.log(response);
-
-            this.setState({
-               content: this.state.content.filter(c => c._id !== id)
-            })
-         })
-         .catch((error) => {
-            console.log(error)
-         })
+   async deleteChannel(id) {
+      try {
+         await ChannelService.deleteChannel(id);
+         this.setState({ content: this.state.content.filter(c => c._id !== id) });
+      }
+      catch (error) {
+         this.setState({ message: error.message });
+      }
    }
 
    render() {
       return (
          <div className="container">
+            {this.state.message && (
+               <div className="row mt-4">
+                  <div className="col-12">
+                     <div className="alert alert-danger" role="alert">
+                        {this.state.message}
+                     </div>
+                  </div>
+               </div>
+            )}
             <div className="row align-items-center my-4">
                <div className="col">
                   <h3 className="mb-0">Your Channels</h3>
