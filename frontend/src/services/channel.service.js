@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { handleDefaultAxiosErrors } from '../helpers/utils';
 
 const API_URL = "http://localhost:5000/channels";
 
@@ -10,16 +11,7 @@ class ChannelService {
       return response.data
     }
     catch (error) {
-      if (error.response) {
-        // The request was made, but the server answered with an error
-        throw Error(error.response.data)
-      }
-      else if (error.request) {
-        throw Error("The request was made, but no answer was received.")
-      }
-      else {
-        throw Error("There was an error setting up the request.")
-      }
+      handleDefaultAxiosErrors(error);
     }
   }
 
@@ -29,16 +21,7 @@ class ChannelService {
       return response.data
     }
     catch (error) {
-      if (error.response) {
-        // The request was made, but the server answered with an error
-        throw Error(error.response.data)
-      }
-      else if (error.request) {
-        throw Error("The request was made, but no answer was received.")
-      }
-      else {
-        throw Error("There was an error setting up the request.")
-      }
+      handleDefaultAxiosErrors(error);
     }
   }
 
@@ -54,16 +37,7 @@ class ChannelService {
       return response
     }
     catch (error) {
-      if (error.response) {
-        // The request was made, but the server answered with an error
-        throw Error(error.response.data)
-      }
-      else if (error.request) {
-        throw Error("The request was made, but no answer was received.")
-      }
-      else {
-        throw Error("There was an error setting up the request.")
-      }
+      handleDefaultAxiosErrors(error);
     }
   }
 
@@ -73,16 +47,7 @@ class ChannelService {
       return response
     }
     catch (error) {
-      if (error.response) {
-        // The request was made, but the server answered with an error
-        throw Error(error.response.data)
-      }
-      else if (error.request) {
-        throw Error("The request was made, but no answer was received.")
-      }
-      else {
-        throw Error("There was an error setting up the request.")
-      }
+      handleDefaultAxiosErrors(error);
     }
   }
 
@@ -92,16 +57,7 @@ class ChannelService {
       return response
     }
     catch (error) {
-      if (error.response) {
-        // The request was made, but the server answered with an error
-        throw Error(error.response.data)
-      }
-      else if (error.request) {
-        throw Error("The request was made, but no answer was received.")
-      }
-      else {
-        throw Error("There was an error setting up the request.")
-      }
+      handleDefaultAxiosErrors(error);
     }
   }
 }
