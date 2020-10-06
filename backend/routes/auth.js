@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const AuthUser = require('../models/auth-user')
+const logSymbols = require('log-symbols')
 
 router.post('/', async (req, res) => {
     const tsUid = req.body.tsUid
@@ -19,7 +20,7 @@ router.post('/', async (req, res) => {
         authUser = await AuthUser.findOne({ uid: tsUid }).exec()
     }
     catch (err) {
-        console.error(err)
+        console.log(logSymbols.error, err)
         res.status(500).send('An error occured when trying to retrieve user from database')
     }
 
@@ -55,7 +56,7 @@ router.post('/key', async (req, res) => {
         tsClient = await ts3Query.getClientByUid(tsUid)
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         res.status(500).send('An error occured when trying to send auth key to Client')
     }
 

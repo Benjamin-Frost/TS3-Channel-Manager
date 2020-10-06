@@ -57,7 +57,7 @@ router.post('/create', async (req, res) => {
             return res.status(403).send('You reached the maximum allowed amount of channels')
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return res.status(500).send('An error occured when trying to access DB')
     }
 
@@ -78,7 +78,7 @@ router.post('/create', async (req, res) => {
         }
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return res.status(500).send('An Error occured when calculating channel number.')
     }
 
@@ -102,7 +102,7 @@ router.post('/create', async (req, res) => {
         await dbChannel.save()
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return res.status(500).send('An error occured when trying to create channel')
     }
 
@@ -126,7 +126,7 @@ router.delete('/:id', async (req, res) => {
         await Promise.all([tsDelete, dbDelete])
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return res.status(500).send('An error occured when trying to delete channel')
     }
 
@@ -174,7 +174,7 @@ router.patch('/:id', async (req, res) => {
         await Promise.all(allPromises)
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return res.status(500).send('An error occured when trying to patch channel')
     }
 
@@ -196,7 +196,7 @@ async function validateChannelAndOwner(dbId, tsUid) {
         ).exec()
     }
     catch (err) {
-        console.log(err)
+        console.log(logSymbols.error, err)
         return { error: true, code: 500, message: 'An error occured when trying to access database' }
     }
 

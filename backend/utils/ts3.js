@@ -1,4 +1,5 @@
 require('dotenv').config()
+const logSymbols = require('log-symbols');
 
 const { TeamSpeak } = require("ts3-nodejs-library")
 
@@ -11,16 +12,16 @@ const ts3Query = new TeamSpeak({
 })
 
 ts3Query.on("ready", () => {
-    console.log('Connected to TS3 Server')
+    console.log(logSymbols.success, '[server] Connected to TS3 Server')
 })
 
 ts3Query.on("error", () => {
-    console.error('Error occured when trying to connect to TS3 Server')
+    console.log(logSymbols.error, '[server] Error occured when trying to connect to TS3 Server')
 })
 
 // Connection lost => Try to reconnect...
 ts3Query.on("close", async () => {
-    console.log("Connection to TS3 Server lost! Trying to reconnect...")
+    console.log(logSymbols.warning, "[server] Connection to TS3 Server lost! Trying to reconnect...")
     await ts3Query.reconnect(-1, 5000) // Retry every 5 seconds
 })
 
