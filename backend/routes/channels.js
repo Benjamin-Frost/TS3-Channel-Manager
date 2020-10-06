@@ -4,6 +4,7 @@ const { ts3Query } = require('../utils/ts3')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Channel = require('../models/channel')
+const logSymbols = require('log-symbols')
 
 router.use((req, res, next) => {
     // JWT Authorisation
