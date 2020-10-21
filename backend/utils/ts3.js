@@ -4,7 +4,7 @@ const logSymbols = require('log-symbols');
 const { TeamSpeak } = require("ts3-nodejs-library")
 
 const ts3Query = new TeamSpeak({
-    host: "localhost",
+    host: "teamspeak",
     serverport: 9987,
     username: "serveradmin",
     password: process.env.SQ_PW,
