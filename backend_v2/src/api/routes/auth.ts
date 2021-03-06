@@ -30,7 +30,6 @@ export default (app: Router) => {
       await dbUser.save();
     } else {
       const user = new User({ ts3Uid: ts3Uid, loginKey: key });
-      console.log(user._id);
       await user.save();
     }
 
@@ -61,7 +60,7 @@ export default (app: Router) => {
         return res.status(400).send('The auth key has expired');
 
       // Login done => authenticate user
-      const accessToken = jwt.sign(ts3Uid, process.env.JWT_SECRET!);
+      const accessToken = jwt.sign(ts3Uid, process.env.JWT_SECRET);
 
       return res.json({
         accessToken: accessToken,
