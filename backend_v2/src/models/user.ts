@@ -1,13 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-  id: string;
+  ts3Uid: string;
   loginKey: string;
 }
 
 const UserSchema = new Schema(
   {
-    id: { type: String, required: true, unique: true },
+    ts3Uid: { type: String, required: true, unique: true },
     loginKey: { type: String, required: true },
   },
   {
