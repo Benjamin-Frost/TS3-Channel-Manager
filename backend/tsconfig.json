@@ -31,9 +31,8 @@
     "node_modules"
   ],
   "include": [
-    "./src/**/*.tsx",
+    "environment.d.ts",
     "./src/**/*.ts",
-    "environment.d.ts"
   ],
   "ts-node": {
     "files": true
