@@ -3,6 +3,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IUser extends Document {
   ts3Uid: string;
   loginKey: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema = new Schema(
