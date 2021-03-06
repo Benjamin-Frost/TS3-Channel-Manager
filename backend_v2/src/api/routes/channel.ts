@@ -6,7 +6,9 @@ import {
   __rootChannelId__,
 } from '../../utils/constants';
 import { teamspeak } from '../../utils/ts3';
-import Channel from '../../models/channel';
+import Channel, { IChannel } from '../../models/channel';
+import HTTPError from '../../utils/http-error';
+import { isValidObjectId } from 'mongoose';
 
 const route = Router();
 
@@ -79,6 +81,59 @@ export default (app: Router) => {
       return res.send('Successfully created channel');
     }
   );
+
+  route.delete('/:id', async (req, res) => {
+    let channel;
+
+    try {
+      channel = await getChannelAndVerifyOwnership(req.params?.id, req.ts3Uid);
+    } catch (error) {
+      return res.status(error.statusCode).send(error.message);
+    }
+
+    // Delete channel on ts3 server
+    await teamspeak.channelDelete(channel.channelId.toString(), true);
+
+    // Delete channel in DB
+    await channel.deleteOne();
+
+    return res.send('Successfully deleted channel');
+  });
+
+  route.patch(
+    '/:id',
+    body('channelName').isLength({ min: 5, max: 20 }),
+    body('channelPassword').notEmpty(),
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() });
+
+      const { channelName, channelPassword } = req.body;
+      let channel;
+
+      try {
+        channel = await getChannelAndVerifyOwnership(
+          req.params?.id,
+          req.ts3Uid
+        );
+      } catch (error) {
+        return res.status(error.statusCode).send(error.message);
+      }
+
+      // Update channel on ts3 server
+      await teamspeak.channelEdit(channel.channelId.toString(), {
+        channelName: channelName,
+        channelPassword: channelPassword,
+      });
+
+      // Update channel in DB
+      channel.channelName = channelName;
+      await channel.save();
+
+      return res.send('Successfully updated channel');
+    }
+  );
 };
 
 interface JwtPayload {
@@ -99,4 +154,16 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   } catch (error) {
     return res.status(403).send('Invalid access token');
   }
+}
+
+async function getChannelAndVerifyOwnership(
+  dbChannelId: string | undefined,
+  ts3Uid: string
+): Promise<IChannel> {
+  if (!isValidObjectId(dbChannelId)) throw new HTTPError(400, 'Invalid DB ID');
+  const channel = await Channel.findById(dbChannelId).exec();
+  if (!channel) throw new HTTPError(404, 'Channel not found');
+  if (channel.ownerUid != ts3Uid)
+    throw new HTTPError(403, 'You cannot delete others channels');
+  return channel;
 }
