@@ -33,7 +33,7 @@
   "include": [
     "./src/**/*.tsx",
     "./src/**/*.ts",
-    "./src/environment.d.ts"
+    "environment.d.ts"
   ],
   "ts-node": {
     "files": true
