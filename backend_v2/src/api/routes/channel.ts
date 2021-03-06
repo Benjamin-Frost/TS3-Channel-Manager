@@ -123,7 +123,7 @@ export default (app: Router) => {
 
       // Update channel on ts3 server
       await teamspeak.channelEdit(channel.channelId.toString(), {
-        channelName: channelName,
+        channelName: `[${channel.channelNum}] ${channelName}`,
         channelPassword: channelPassword,
       });
 
