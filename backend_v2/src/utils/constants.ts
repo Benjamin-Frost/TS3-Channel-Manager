@@ -12,7 +12,7 @@ export const __ts3Username__ = 'serveradmin';
 export const __ts3Password__ = process.env.TEAMSPEAK_SERVERQUERY_PASSWORD;
 export const __ts3Nickname__ = 'TS3 Channel Manager';
 
-export const __rootChannelId__ = 'asd';
+export const __rootChannelId__ = '4';
 export const __maxChannelsPerUser__ = 3;
 
 // Others

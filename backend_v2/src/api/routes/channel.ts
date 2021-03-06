@@ -23,11 +23,6 @@ export default (app: Router) => {
     return res.json(channel);
   });
 
-  route.get('/all', async (_req, res) => {
-    const channels = await teamspeak.channelList();
-    return res.json(channels);
-  });
-
   route.post(
     '/create',
     body('channelName').isLength({ min: 5, max: 20 }),
@@ -44,16 +39,15 @@ export default (app: Router) => {
         ownerUid: req.ts3Uid,
       }).exec();
 
-      if (channelAmount > __maxChannelsPerUser__)
+      if (channelAmount >= __maxChannelsPerUser__)
         return res
           .status(403)
           .send('You reached the max amount of allowed channels');
 
       // Find the lowest available channel num
-      const channels = await Channel.find(
-        {},
-        { sort: { channelNum: 'asc' } }
-      ).exec();
+      const channels = await Channel.find({}, null, {
+        sort: { channelNum: 1 },
+      }).exec();
 
       let num = 0;
       let parentId = 0;
