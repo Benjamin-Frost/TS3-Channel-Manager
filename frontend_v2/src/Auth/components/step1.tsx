@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StepWizardChildProps } from 'react-step-wizard';
 import AuthService from '../services/auth';
 
@@ -10,16 +10,16 @@ import Stats from './stats';
 
 interface Props {
   showError: (message: string) => void;
+  ts3Uid: string;
+  setTs3Uid: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Step1: React.FC<Partial<StepWizardChildProps> & Props> = (
   props: Partial<StepWizardChildProps> & Props
 ) => {
-  const [ts3Uid, setTs3Uid] = useState('');
-
   const requestAuthKey = async () => {
     try {
-      await AuthService.requestAuthKey(ts3Uid);
+      await AuthService.requestAuthKey(props.ts3Uid);
       props.showError(''); // Clear errors
       props.nextStep!();
     } catch (error) {
@@ -33,8 +33,8 @@ const Step1: React.FC<Partial<StepWizardChildProps> & Props> = (
         <Form.Label>TS3 UID*</Form.Label>
         <Form.Control
           type="text"
-          value={ts3Uid}
-          onChange={(e) => setTs3Uid(e.target.value)}
+          value={props.ts3Uid}
+          onChange={(e) => props.setTs3Uid(e.target.value)}
         />
       </Form.Group>
       <p>
