@@ -1,12 +1,12 @@
 import Button from 'react-bootstrap/Button';
 
-interface StatsProps {
+interface Props {
   nextStep: () => void;
   totalSteps: number;
   currentStep: number;
 }
 
-const Stats: React.FC<StatsProps> = (props: StatsProps) => (
+const Stats: React.FC<Props> = (props: Props) => (
   <div>
     <hr />
     {props.currentStep < props.totalSteps ? (

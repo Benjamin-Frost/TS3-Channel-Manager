@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import { __mongoUrl__, __port__ } from './utils/constants';
 import routes from './api';
 
 const app = express()
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
+  .use(cors())
   .use(routes());
 
 mongoose.connect(__mongoUrl__, {
