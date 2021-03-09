@@ -32,10 +32,13 @@ class AuthService {
     localStorage.removeItem('user');
   }
 
-  // returns 'null' if user is not authenticated
   getCurrentUser() {
     const user = localStorage.getItem('user');
     return user != null ? JSON.parse(user) : null;
+  }
+
+  isAuthenticated() {
+    return this.getCurrentUser != null;
   }
 }
 
