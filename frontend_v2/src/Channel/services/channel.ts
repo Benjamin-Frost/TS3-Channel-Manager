@@ -14,6 +14,23 @@ class ChannelService {
       handleDefaultAxiosErrors(error);
     }
   }
+
+  async create(name: string, password: string) {
+    try {
+      await axios.post(
+        `${API_URL}/create`,
+        {
+          channelName: name,
+          channelPassword: password,
+        },
+        {
+          headers: authHeader(),
+        }
+      );
+    } catch (error) {
+      handleDefaultAxiosErrors(error);
+    }
+  }
 }
 
 export default new ChannelService();

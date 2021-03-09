@@ -16,7 +16,9 @@ export default (app: Router) => {
   app.use('/channel', authMiddleware, route);
 
   route.get('/', async (req, res) => {
-    const channels = await Channel.find({ ownerUid: req.ts3Uid }).exec();
+    const channels = await Channel.find({ ownerUid: req.ts3Uid }, null, {
+      sort: { channelNum: 1 },
+    }).exec();
     return res.json(channels);
   });
 

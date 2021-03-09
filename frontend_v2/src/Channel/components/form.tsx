@@ -39,6 +39,7 @@ export default function ChannelForm(props: Props) {
         <Form.Label>Channel Password</Form.Label>
         <Form.Control
           name="channelPassword"
+          type="password"
           ref={register({ required: true })}
           isInvalid={!!errors.channelPassword}
         />
