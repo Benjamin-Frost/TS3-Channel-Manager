@@ -49,6 +49,7 @@ ReactDOM.render(
         <PrivateRoute path="/channels" component={Channel} />
       </Switch>
     </Router>
+    <div className="my-5" />
   </React.StrictMode>,
   document.getElementById('root')
 );
