@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import PrivateRoute from './utils/private-route';
 
 // Bootstrap Imports
 import Button from 'react-bootstrap/Button';
@@ -10,6 +11,7 @@ import Navbar from 'react-bootstrap/Navbar';
 // Module Imports
 import Home from './Home';
 import Auth from './Auth';
+import Channels from './Channels';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +26,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/auth" component={Auth} />
+        <PrivateRoute path="/channels" component={Channels} />
       </Switch>
     </Router>
   </React.StrictMode>,

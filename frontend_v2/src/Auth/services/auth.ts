@@ -38,7 +38,7 @@ class AuthService {
   }
 
   isAuthenticated() {
-    return this.getCurrentUser != null;
+    return localStorage.getItem('user') != null;
   }
 }
 

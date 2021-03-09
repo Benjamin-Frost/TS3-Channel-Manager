@@ -1,18 +1,18 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 
-import LoginPage from './pages/login';
+import ChannelsPage from './pages/channels';
 
-const Auth: React.FC = () => {
+const Channels: React.FC = () => {
   const match = useRouteMatch();
 
   return (
     <React.Fragment>
       <Switch>
-        <Route path={`${match.path}/login`} component={LoginPage} />
+        <Route exact path={`${match.path}`} component={ChannelsPage} />
       </Switch>
     </React.Fragment>
   );
 };
 
-export default Auth;
+export default Channels;
