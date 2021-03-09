@@ -24,6 +24,7 @@ const Step2: React.FC<Partial<StepWizardChildProps> & Props> = (
       await AuthService.login(props.ts3Uid, key);
       props.showError(''); // Clear errors
       history.push('/channels');
+      window.location.reload();
     } catch (error) {
       props.showError(error.message);
     }
