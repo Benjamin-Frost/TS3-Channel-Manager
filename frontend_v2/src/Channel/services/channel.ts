@@ -1,17 +1,28 @@
 import axios from 'axios';
 import authHeader from '../../utils/auth-header';
-import { handleDefaultAxiosErrors } from '../../utils/axios-errors';
 import { __backendUrl__ } from '../../utils/constants';
+import IChannel from '../interfaces/channel';
 
 const API_URL = `${__backendUrl__}/channel`;
 
 class ChannelService {
-  async channelList() {
+  async getAll(): Promise<IChannel[]> {
     try {
       const channels = await axios.get(API_URL, { headers: authHeader() });
-      return channels.data;
+      return channels.data as IChannel[];
     } catch (error) {
-      handleDefaultAxiosErrors(error);
+      throw error;
+    }
+  }
+
+  async getById(id: string): Promise<IChannel> {
+    try {
+      const channel = await axios.get(`${API_URL}/${id}`, {
+        headers: authHeader(),
+      });
+      return channel.data;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -28,7 +39,24 @@ class ChannelService {
         }
       );
     } catch (error) {
-      handleDefaultAxiosErrors(error);
+      throw error;
+    }
+  }
+
+  async edit(id: string, name: string, password: string) {
+    try {
+      await axios.patch(
+        `${API_URL}/${id}`,
+        {
+          channelName: name,
+          channelPassword: password,
+        },
+        {
+          headers: authHeader(),
+        }
+      );
+    } catch (error) {
+      throw error;
     }
   }
 }

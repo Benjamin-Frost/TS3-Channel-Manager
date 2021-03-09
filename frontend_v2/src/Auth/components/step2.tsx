@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StepWizardChildProps } from 'react-step-wizard';
 import AuthService from '../services/auth';
 import { useHistory } from 'react-router-dom';
+import { axiosErrorToString } from '../../utils/axios-errors';
 
 // Bootstrap Imports
 import Form from 'react-bootstrap/Form';
@@ -26,7 +27,7 @@ const Step2: React.FC<Partial<StepWizardChildProps> & Props> = (
       history.push('/channels');
       window.location.reload();
     } catch (error) {
-      props.showError(error.message);
+      props.showError(axiosErrorToString(error));
     }
   };
   return (

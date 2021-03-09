@@ -1,6 +1,7 @@
 import React from 'react';
 import { StepWizardChildProps } from 'react-step-wizard';
 import AuthService from '../services/auth';
+import { axiosErrorToString } from '../../utils/axios-errors';
 
 // Bootstrap Imports
 import Form from 'react-bootstrap/Form';
@@ -23,7 +24,7 @@ const Step1: React.FC<Partial<StepWizardChildProps> & Props> = (
       props.showError(''); // Clear errors
       props.nextStep!();
     } catch (error) {
-      props.showError(error.message);
+      props.showError(axiosErrorToString(error));
     }
   };
   return (

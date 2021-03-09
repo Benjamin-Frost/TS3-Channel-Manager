@@ -27,6 +27,7 @@ export default function ChannelForm(props: Props) {
           name="channelName"
           ref={register({ required: true, minLength: 5, maxLength: 20 })}
           isInvalid={!!errors.channelName}
+          autoComplete="off"
         />
         {errors.channelName && (
           <Form.Control.Feedback type="invalid">
@@ -42,6 +43,7 @@ export default function ChannelForm(props: Props) {
           type="password"
           ref={register({ required: true })}
           isInvalid={!!errors.channelPassword}
+          autoComplete="off"
         />
         {errors.channelPassword && (
           <Form.Control.Feedback type="invalid">

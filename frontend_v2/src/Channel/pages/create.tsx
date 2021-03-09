@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ChannelForm, { IFormInput } from '../components/form';
 import { useHistory } from 'react-router-dom';
 import ChannelService from '../services/channel';
+import { axiosErrorToString } from '../../utils/axios-errors';
 
 // Bootstrap Imports
 import Alert from 'react-bootstrap/Alert';
@@ -16,7 +17,7 @@ const CreateChannelPage: React.FC = () => {
       await ChannelService.create(data.channelName, data.channelPassword);
       history.push('/channels');
     } catch (error) {
-      setError(error.message);
+      setError(axiosErrorToString(error));
     }
   };
 

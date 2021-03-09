@@ -1,4 +1,4 @@
-export interface IChannel {
+export default interface IChannel {
   _id: string;
   channelId: number;
   channelNum: number;

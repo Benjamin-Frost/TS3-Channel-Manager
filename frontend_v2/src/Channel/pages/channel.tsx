@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { IChannel } from '../interfaces/channel';
+import IChannel from '../interfaces/channel';
 import ChannelService from '../services/channel';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { axiosErrorToString } from '../../utils/axios-errors';
 
 // Bootstrap imports
 import Alert from 'react-bootstrap/Alert';
@@ -21,10 +22,10 @@ const ChannelPage: React.FC = () => {
   useEffect(() => {
     const fetchChannels = async () => {
       try {
-        const response = await ChannelService.channelList();
+        const response = await ChannelService.getAll();
         setChannels(response);
       } catch (error) {
-        setError(error.message);
+        setError(axiosErrorToString(error));
       }
     };
     fetchChannels();

@@ -11,7 +11,7 @@ interface ErrorChild {
   location: string;
 }
 
-export function handleDefaultAxiosErrors(error: AxiosError) {
+export function axiosErrorToString(error: AxiosError): string {
   if (error.response) {
     // The request was made, but the server answered with an error
     const data = error.response.data;
@@ -19,13 +19,12 @@ export function handleDefaultAxiosErrors(error: AxiosError) {
       const errors = (data as ErrorResponse).errors.map(
         (error) => `${error.param}: ${error.msg}`
       );
-      throw Error(errors.toString());
+      errors.toString();
     } else {
-      throw Error(data);
+      return data;
     }
   } else if (error.request) {
-    throw Error('The request was made, but no answer was received.');
-  } else {
-    throw Error('There was an error setting up the request.');
+    return 'The request was made, but no answer was received';
   }
+  return 'There was an error setting up the request';
 }
