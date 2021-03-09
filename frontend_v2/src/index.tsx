@@ -11,7 +11,7 @@ import Navbar from 'react-bootstrap/Navbar';
 // Module Imports
 import Home from './Home';
 import Auth from './Auth';
-import Channels from './Channels';
+import Channel from './Channel';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,7 +26,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/auth" component={Auth} />
-        <PrivateRoute path="/channels" component={Channels} />
+        <PrivateRoute path="/channels" component={Channel} />
       </Switch>
     </Router>
   </React.StrictMode>,
