@@ -1,28 +1,33 @@
 {
-  "name": "backend",
+  "name": "backend_v2",
   "version": "1.0.0",
-  "description": "Backend for the TS3 Channel Manager",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Benjamin-Frost/TS3-Channel-Manager.git"
-  },
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon src/index.ts",
+    "start": "node dist/app.js",
+    "build": "tsc -p ."
   },
   "keywords": [],
-  "author": "Benjamin Frost",
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "@types/cors": "^2.8.10",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
-    "log-symbols": "^4.0.0",
-    "mongoose": "^5.10.0",
-    "ts3-nodejs-library": "^3.1.0"
+    "mongoose": "^5.11.19",
+    "ts3-nodejs-library": "^3.2.0"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
-    "nodemon": "^2.0.4"
+    "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.10.3",
+    "@types/node": "^14.14.31",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
   }
 }
