@@ -59,6 +59,16 @@ class ChannelService {
       throw error;
     }
   }
+
+  async delete(id: string) {
+    try {
+      await axios.delete(`${API_URL}/${id}`, {
+        headers: authHeader(),
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new ChannelService();

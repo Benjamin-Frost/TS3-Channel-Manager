@@ -6,7 +6,10 @@ import { axiosErrorToString } from '../../utils/axios-errors';
 
 // Bootstrap Imports
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import Spinner from 'react-bootstrap/Spinner';
 
 interface Params {
@@ -39,10 +42,32 @@ const EditChannelPage: React.FC = () => {
       setError(axiosErrorToString(error));
     }
   };
+
+  const deleteChannel = async () => {
+    try {
+      await ChannelService.delete(id);
+      history.push('/channels');
+    } catch (error) {
+      setError(axiosErrorToString(error));
+    }
+  };
   return (
     <React.Fragment>
       <Container>
-        <h2 className="mb-4">Edit Channel</h2>
+        <Row className="mb-4">
+          <Col>
+            <h2>Your Channels</h2>
+          </Col>
+          <Col>
+            <Button
+              variant="danger"
+              className="float-right"
+              onClick={deleteChannel}
+            >
+              Delete Channel
+            </Button>
+          </Col>
+        </Row>
         {channelName ? (
           <ChannelForm
             onSubmit={onSubmit}
