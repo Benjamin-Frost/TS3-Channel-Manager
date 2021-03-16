@@ -1,3 +1,6 @@
+![TS3-Channel-Mananger-Banner](https://user-images.githubusercontent.com/58258541/111356993-30111700-8689-11eb-8420-6a592588be8a.jpg)
+
+
 TS3-Channel-Manager is an app that handles the creation of TS3 Channels with ease. You can simply set this application up and your community will be able to create permanent TS3 Channels through an intuitive Webinterface.
 
 ## ⚓ Prerequisites
